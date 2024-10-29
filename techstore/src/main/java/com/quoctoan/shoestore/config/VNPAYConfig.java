@@ -10,7 +10,7 @@ public class VNPAYConfig {
     @Getter
     @Value("https://sandbox.vnpayment.vn/paymentv2/vpcpay.html")
     private String vnp_PayUrl;
-    @Value("http://localhost:8080/shoestore/api/payment/vn-pay-callback")
+    @Value("http://localhost:8080/techstore/api/payment/vn-pay-callback")
     private String vnp_ReturnUrl;
     @Value("KTMIUOJ9")
     private String vnp_TmnCode ;

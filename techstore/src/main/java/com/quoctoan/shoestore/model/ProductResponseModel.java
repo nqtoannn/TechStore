@@ -1,3 +1,4 @@
+
 package com.quoctoan.shoestore.model;
 
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Data
@@ -20,10 +22,13 @@ public class ProductResponseModel{
     private String imageUrl;
     private String category;
     private String status;
+    private Integer rated;
+    private Double rating;
+    private Integer sold;
     private String avrPrice;
+    private Map attributes;
     private List<ProductItemModel> productItems;
     private Integer discountPercent = 0;
-
 
 
     public void calculateAvrPrice() {

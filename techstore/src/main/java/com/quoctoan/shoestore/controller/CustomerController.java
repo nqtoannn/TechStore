@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RestController
-@RequestMapping(path = "/shoestore/api/")
+@RequestMapping(path = "/techstore/api/")
 public class CustomerController {
 
     @Autowired

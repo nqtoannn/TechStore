@@ -54,7 +54,7 @@ public class AuthenticationService {
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
-    String url = "http://localhost:8080/shoestore/api/account/activeUser/" + user.getId().toString();
+    String url = "http://localhost:8080/techstore/api/account/activeUser/" + user.getId().toString();
     Map<String, Object> model = new HashMap<>();
     model.put("url", url);
     String[] cc = {};
@@ -170,7 +170,7 @@ public class AuthenticationService {
         Map<String, Object> model = new HashMap<>();
         model.put("userName", savedUser.getUsername());
         model.put("password", password);
-        emailSendService.sendMail(savedUser.getEmail(), cc, "Tài khoản truy cập ShoeStore của bạn đã được tạo", model);
+        emailSendService.sendMail(savedUser.getEmail(), cc, "Tài khoản truy cập TechStore của bạn đã được tạo", model);
       }
       var jwtToken = jwtService.generateToken(user);
       var refreshToken = jwtService.generateRefreshToken(user);

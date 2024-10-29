@@ -18,7 +18,7 @@ import java.io.IOException;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/shoestore/api/account")
+@RequestMapping("/techstore/api/account")
 @RequiredArgsConstructor
 public class AccountController {
   @Autowired

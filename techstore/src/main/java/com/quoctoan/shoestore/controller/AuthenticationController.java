@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/shoestore/api/auth")
+@RequestMapping("/techstore/api/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
   private final AuthenticationService service;

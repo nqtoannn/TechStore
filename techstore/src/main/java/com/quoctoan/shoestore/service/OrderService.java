@@ -218,7 +218,7 @@ public class OrderService {
             System.out.println(customerId + productItemIdList.toString());
             deleteCartByCustomerProductItem(customerId,productItemIdList);
             model.put("orderItems", orderItemsJSON);
-            emailSendService.sendMail(user.get().getEmail(), cc, "Thông báo đặt hàng thành công", model);
+//            emailSendService.sendMail(user.get().getEmail(), cc, "Thông báo đặt hàng thành công", model);
             if(paymentMethodModel.get().getPaymentMethodName().equals("VN-Pay")){
                 String url = paymentService.createVnPayPaymentforOrder(totalPrice,order.getId(),request);
                 return ResponseEntity.status(HttpStatus.OK)
@@ -257,7 +257,6 @@ public class OrderService {
             orderId = jsonNode.get("orderId") != null ? jsonNode.get("orderId").asInt() : null;
             statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
             Optional<Order> orderOptional = orderRepository.findById(orderId);
-
             if (orderOptional.isPresent()) {
                 Order order = orderOptional.get();
                 OrderStatus orderStatus = new OrderStatus();

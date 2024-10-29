@@ -28,4 +28,6 @@ public class Review extends BaseEntity{
     @ManyToOne()
     @JoinColumn(name = "customer_id")
     private User customer;
+    @Column(name = "responses")
+    private String responses;
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("shoestore/api/payment")
+@RequestMapping("techstore/api/payment")
 @RequiredArgsConstructor
 public class PaymentController {
     private final PaymentService paymentService;
@@ -33,8 +33,8 @@ public class PaymentController {
         if (status.equals("00")) {
             String orderInfo = request.getParameter("vnp_OrderInfo");
             System.out.println(orderInfo);
-            String[] parts = orderInfo.split(":"); // Tách chuỗi tại dấu hai chấm
-            String numberPart = parts[1]; // Phần số là phần sau dấu hai chấm
+            String[] parts = orderInfo.split(":");
+            String numberPart = parts[1];
             Integer orderID = Integer.parseInt(numberPart);
             Optional<Order> orderOptional = orderRepository.findById(orderID);
             if (orderOptional.isPresent()) {
@@ -46,7 +46,8 @@ public class PaymentController {
             }
             String successHtml = "<html><head><link href=\"https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap\" rel=\"stylesheet\"></head><style>body {text-align: center; padding: 40px 0; background: #EBF0F5; } h1 { color: #88B04B; font-family: \"Nunito Sans\", \"Helvetica Neue\", sans-serif; font-weight: 900; font-size: 40px; margin-bottom: 10px; } p { color: #404F5E; font-family: \"Nunito Sans\", \"Helvetica Neue\", sans-serif; font-size:20px; margin: 0; } i { color: #9ABC66; font-size: 100px; line-height: 200px; margin-left:-15px; } .card { background: white; padding: 60px; border-radius: 4px; box-shadow: 0 2px 3px #C8D0D8; display: inline-block; margin: 0 auto; } </style> <body> <div class=\"card\"> <div style=\"border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;\"> <i class=\"checkmark\">✓</i> </div> <h1>Thanh toán thành công</h1> <p>Cảm ơn bạn đã mua sắp tại cửa hàng của chúng tôi!<br/> Thông báo này sẽ đóng lại sau vài giây !</p> </div> <script>setTimeout(function() { window.close(); }, 10000);</script> </body> </html>";
             return new ResponseEntity<>(successHtml, HttpStatus.OK);
-        } else {
+        }
+        else {
             String errorHtml = "<html>\n" +
                     "  <head>\n" +
                     "    <link href=\"https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap\" rel=\"stylesheet\">\n" +

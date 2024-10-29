@@ -32,7 +32,6 @@ public class ProductItem extends BaseEntity {
     private Collection<Cart> cartItems;
     @Column(name = "quantity_in_stock")
     private Integer quantityInStock;
-    private String detailQuantity;
     private String status;
     private String imageUrl;
 }

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping(path = "/shoestore/api/management/")
+@RequestMapping(path = "/techstore/api/management/")
 public class ManagementController {
 
     @Autowired
@@ -27,9 +27,11 @@ public class ManagementController {
     PromotionService promotionService;
     @Autowired
     private AuthenticationService authenticationService;
+    @Autowired
+    private BrandService brandService;
 
     //###############Employee/Customer################
-    @PostMapping("/addEmployee") //done
+    @PostMapping("addEmployee") //done
     public ResponseEntity<AuthenticationResponse> addEmployee(@RequestBody String json) {
         return ResponseEntity.ok(authenticationService.addEmployee(json));
     }
@@ -80,6 +82,16 @@ public class ManagementController {
     public ResponseEntity<ResponseObject> findRevenueProductBetweenDates(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                                                   @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return revenueService.getRevenueProductBetweenDate(startDate, endDate);
+    }
+
+    //#################### Brand #####################
+    @PostMapping("brand/add")
+    public ResponseEntity<ResponseObject> addBrand(@RequestBody String json){
+        return brandService.addBrand(json);
+    }
+    @GetMapping("brand/getAll")
+    public ResponseEntity<ResponseObject> getAllBrand(){
+        return brandService.getAllBrands();
     }
 
 }

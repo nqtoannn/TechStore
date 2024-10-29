@@ -28,7 +28,7 @@ public class CartService {
     @Autowired
     private UserRepository userRepository;
 
-    public ResponseEntity<ResponseObject>   addToCart(String json) {
+    public ResponseEntity<ResponseObject> addToCart(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             if (json == null || json.isEmpty()) {

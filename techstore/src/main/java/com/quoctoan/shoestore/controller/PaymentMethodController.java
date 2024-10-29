@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RestController
-@RequestMapping(path = "/shoestore/api/")
+@RequestMapping(path = "/techstore/api/")
 public class PaymentMethodController {
     @Autowired
     PaymentMethodService paymentMethodService;

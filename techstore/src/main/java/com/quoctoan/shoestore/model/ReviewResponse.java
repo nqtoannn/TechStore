@@ -15,4 +15,5 @@ public class ReviewResponse {
     private String comment;
     private String imageUrl;
     private String customer;
+    private String responses;
 }

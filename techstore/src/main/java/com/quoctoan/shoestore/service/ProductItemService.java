@@ -25,10 +25,8 @@ import java.util.stream.Collectors;
 public class ProductItemService {
     @Autowired
     private ProductItemRepository productItemRepository;
-
     @Autowired
     private EmailSendService emailSendService;
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -195,7 +193,5 @@ public class ProductItemService {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
         }
     }
-
-
 
 }

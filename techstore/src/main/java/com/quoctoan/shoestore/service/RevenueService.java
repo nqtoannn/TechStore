@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -88,6 +89,9 @@ public class RevenueService {
             productModel.setImageUrl(product.getImageUrl());
             productModel.setCategory(product.getCategory().getCategoryName());
             productModel.setStatus(product.getStatus());
+            productModel.setRating(product.getRating());
+            productModel.setRated(product.getRated());
+            productModel.setSold(product.getSold());
             List<ProductItem> productItemList = product.getProductItems();
             List<ProductItemModel> productItemModels = new ArrayList<>();
             productItemList.forEach(productItems -> {

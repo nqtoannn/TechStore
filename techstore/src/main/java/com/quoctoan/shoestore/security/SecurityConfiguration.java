@@ -35,13 +35,13 @@ public class SecurityConfiguration {
                 .cors(withDefaults())
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/shoestore/api/auth/**",
-                        "/shoestore/api/productItem/**",
-                        "/shoestore/api/products/**",
-                        "/shoestore/api/review/**",
-                        "/shoestore/api/category/**",
-                        "/shoestore/api/payment/**",
-                        "/shoestore/api/account/**",
+                        "/techstore/api/auth/**",
+                        "/techstore/api/productItem/**",
+                        "/techstore/api/products/**",
+                        "/techstore/api/review/**",
+                        "/techstore/api/category/**",
+                        "/techstore/api/payment/**",
+                        "/techstore/api/account/**",
                         "/configuration/ui",
                         "/configuration/security",
                         "/v3/api-docs/**",
@@ -51,14 +51,15 @@ public class SecurityConfiguration {
                         "/configuration/security",
                         "/swagger-ui/**",
                         "/webjars/**",
-                        "/swagger-ui.html"
+                        "/swagger-ui.html",
+                        "/techstore/api/management/**"
                 )
                 .permitAll()
-                .requestMatchers("/shoestore/api/management/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-                .requestMatchers("/shoestore/api/employee/**").hasAnyRole(EMPLOYEE.name(), ADMIN.name())
-                .requestMatchers("/shoestore/api/customer/**").hasAnyRole(CUSTOMER.name(), ADMIN.name(), EMPLOYEE.name())
-                .requestMatchers("/shoestore/api/address/**").hasAnyRole(CUSTOMER.name(), ADMIN.name())
-                .requestMatchers("/shoestore/api/users/**").hasAnyRole(CUSTOMER.name(), EMPLOYEE.name(), ADMIN.name())
+//                .requestMatchers("/techstore/api/management/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .requestMatchers("/techstore/api/employee/**").hasAnyRole(EMPLOYEE.name(), ADMIN.name())
+                .requestMatchers("/techstore/api/customer/**").hasAnyRole(CUSTOMER.name(), ADMIN.name(), EMPLOYEE.name())
+                .requestMatchers("/techstore/api/address/**").hasAnyRole(CUSTOMER.name(), ADMIN.name())
+                .requestMatchers("/techstore/api/users/**").hasAnyRole(CUSTOMER.name(), EMPLOYEE.name(), ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -43,17 +43,17 @@ public class ReviewService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ResponseObject("ERROR", "Empty JSON", ""));
             }
-            JsonNode jsonObjectPromotion = objectMapper.readTree(json);
-            Integer ratingValue = jsonObjectPromotion.get("ratingValue") != null ?
-                    jsonObjectPromotion.get("ratingValue").asInt() : 5;
-            String comment = jsonObjectPromotion.get("comment") != null ?
-                    jsonObjectPromotion.get("comment").asText() : "";
-            String imageUrl = jsonObjectPromotion.get("imageUrl") != null ?
-                    jsonObjectPromotion.get("imageUrl").asText() : "";
-            Integer productItemId = jsonObjectPromotion.get("productItemId") != null ?
-                    jsonObjectPromotion.get("productItemId").asInt() : 4;
-            Integer userId = jsonObjectPromotion.get("userId") != null ?
-                    jsonObjectPromotion.get("userId").asInt() : 52;
+            JsonNode jsonObjectAddReview = objectMapper.readTree(json);
+            Integer ratingValue = jsonObjectAddReview.get("ratingValue") != null ?
+                    jsonObjectAddReview.get("ratingValue").asInt() : 5;
+            String comment = jsonObjectAddReview.get("comment") != null ?
+                    jsonObjectAddReview.get("comment").asText() : "";
+            String imageUrl = jsonObjectAddReview.get("imageUrl") != null ?
+                    jsonObjectAddReview.get("imageUrl").asText() : "";
+            Integer productItemId = jsonObjectAddReview.get("productItemId") != null ?
+                    jsonObjectAddReview.get("productItemId").asInt() : 4;
+            Integer userId = jsonObjectAddReview.get("userId") != null ?
+                    jsonObjectAddReview.get("userId").asInt() : 52;
             Optional<User> optionalUser = userRepository.findById(userId);
             Optional<ProductItem> optionalProductItem = productItemRepository.findById(productItemId);
             if(optionalUser.isPresent() && optionalProductItem.isPresent()){
@@ -64,6 +64,10 @@ public class ReviewService {
                 review.setImageUrl(imageUrl);
                 review.setProduct(optionalProductItem.get().getProduct());
                 Review savedReview = reviewRepository.save(review);
+                Product product = optionalProductItem.get().getProduct();
+                product.setRating((product.getRated()*product.getRating() + ratingValue) / (product.getRated() + 1));
+                product.setRated(product.getRated() + 1);
+                productRepository.save(product);
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("OK", "Successfully", savedReview.getId()));
             }
@@ -97,6 +101,7 @@ public class ReviewService {
                     reviewResponse.setRatingValue(review.getRatingValue());
                     reviewResponse.setImageUrl(review.getImageUrl());
                     reviewResponse.setComment(review.getComment());
+                    reviewResponse.setResponses(review.getResponses());
                     reviewResponses.add(reviewResponse);
 
                 }
