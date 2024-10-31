@@ -89,9 +89,6 @@ public class ManagementController {
     public ResponseEntity<ResponseObject> addBrand(@RequestBody String json){
         return brandService.addBrand(json);
     }
-    @GetMapping("brand/getAll")
-    public ResponseEntity<ResponseObject> getAllBrand(){
-        return brandService.getAllBrands();
-    }
+
 
 }

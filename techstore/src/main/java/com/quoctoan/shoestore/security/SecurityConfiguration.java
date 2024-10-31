@@ -42,16 +42,7 @@ public class SecurityConfiguration {
                         "/techstore/api/category/**",
                         "/techstore/api/payment/**",
                         "/techstore/api/account/**",
-                        "/configuration/ui",
-                        "/configuration/security",
-                        "/v3/api-docs/**",
-                        "/swagger-resources",
-                        "/swagger-resources/**",
-                        "/configuration/ui",
-                        "/configuration/security",
-                        "/swagger-ui/**",
-                        "/webjars/**",
-                        "/swagger-ui.html",
+                        "/techstore/api/brand/**",
                         "/techstore/api/management/**"
                 )
                 .permitAll()

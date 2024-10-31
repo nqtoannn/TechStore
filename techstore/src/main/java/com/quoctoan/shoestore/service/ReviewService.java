@@ -88,6 +88,7 @@ public class ReviewService {
     public ResponseEntity<ResponseObject> getAllReviewByProductId(Integer productId){
         try {
             List<Review> reviewList = reviewRepository.findByProductId(productId);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             if(reviewList.isEmpty()){
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("OK", "Not found", ""));
@@ -102,6 +103,7 @@ public class ReviewService {
                     reviewResponse.setImageUrl(review.getImageUrl());
                     reviewResponse.setComment(review.getComment());
                     reviewResponse.setResponses(review.getResponses());
+                    reviewResponse.setCreateAt(review.getCreatedAt().format(formatter));
                     reviewResponses.add(reviewResponse);
 
                 }

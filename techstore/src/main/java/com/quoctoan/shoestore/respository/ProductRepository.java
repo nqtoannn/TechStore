@@ -1,15 +1,15 @@
 package com.quoctoan.shoestore.respository;
 
 import com.quoctoan.shoestore.entity.Product;
-import com.quoctoan.shoestore.entity.ProductItem;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
@@ -23,4 +23,35 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     void updateImage(String image, Integer productId);
     @Query(value = "SELECT P FROM Product P WHERE P.status = 'ACTIVE'")
     List<Product> findAllProduct();
+
+    Page <Product> findAll(Pageable pageable);
+
+    Page<Product> findByCategoryId(Integer categoryId, Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE "
+            + "(:categoryId IS NULL OR p.category.id = :categoryId) AND "
+            + "(:minRating IS NULL OR p.rating >= :minRating) "
+            + "ORDER BY p.sold DESC")
+    Page<Product> findByFiltersDesc(
+            @Param("categoryId") Integer categoryId,
+            @Param("minRating") Double minRating,
+            Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE "
+            + "(:categoryId IS NULL OR p.category.id = :categoryId) AND "
+            + "(:minRating IS NULL OR p.rating >= :minRating)")
+    Page<Product> findByFilters(
+            @Param("categoryId") Integer categoryId,
+            @Param("minRating") Double minRating,
+            Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE "
+            + "(:categoryId IS NULL OR p.category.id = :categoryId) AND "
+            + "(:minRating IS NULL OR p.rating >= :minRating) "
+            + "ORDER BY p.sold ASC")
+    Page<Product> findByFiltersAsc(
+            @Param("categoryId") Integer categoryId,
+            @Param("minRating") Double minRating,
+            Pageable pageable);
+
 }

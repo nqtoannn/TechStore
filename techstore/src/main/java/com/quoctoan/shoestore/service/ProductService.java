@@ -12,6 +12,9 @@ import com.quoctoan.shoestore.respository.ProductRepository;
 import com.quoctoan.shoestore.respository.PromotionRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+
 
 @Transactional
 @Service
@@ -70,22 +76,46 @@ public class ProductService {
     }
 
 
-    public ResponseEntity<ResponseObject> findAll() {
-        List<Product> productList = productRepository.findAllProduct();
-        List<ProductResponseModel> productResponseModelList = new ArrayList<>();
-        productList.forEach(product -> {
-            productResponseModelList.add(convertToProductResponseModel(product));
-        });
+//    public ResponseEntity<ResponseObject> findAll() {
+//        List<Product> productList = productRepository.findAllProduct();
+//        List<ProductResponseModel> productResponseModelList = new ArrayList<>();
+//        productList.forEach(product -> {
+//            productResponseModelList.add(convertToProductResponseModel(product));
+//        });
+//
+//        // Kiểm tra và trả về kết quả
+//        if (!productResponseModelList.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.OK)
+//                    .body(new ResponseObject("OK", "Successfully", productResponseModelList));
+//        } else {
+//            return ResponseEntity.status(HttpStatus.OK)
+//                    .body(new ResponseObject("Not found", "Not found", ""));
+//        }
+//    }
+    public ResponseEntity<ResponseObject> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productRepository.findAll(pageable); // Sử dụng Pageable ở đây
+
+        List<ProductResponseModel> productResponseModelList = productPage.stream()
+                .map(this::convertToProductResponseModel)
+                .collect(Collectors.toList());
 
         // Kiểm tra và trả về kết quả
         if (!productResponseModelList.isEmpty()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("products", productResponseModelList);
+            response.put("currentPage", productPage.getNumber());
+            response.put("totalItems", productPage.getTotalElements());
+            response.put("totalPages", productPage.getTotalPages());
+
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("OK", "Successfully", productResponseModelList));
+                    .body(new ResponseObject("OK", "Successfully", response));
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("Not found", "Not found", ""));
         }
     }
+
 
     public ResponseEntity<ResponseObject> findAllWithAllStatus() {
         List<Product> productList = productRepository.findAll();
@@ -113,18 +143,106 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<ResponseObject> findAllByCateId(Integer categoryId) {
-        List<Product> productList = productRepository.findByCategoryId(categoryId);
-        List<ProductResponseModel> productResponseModelList = new ArrayList<>();
-        productList.forEach(product -> {
-            productResponseModelList.add(convertToProductResponseModel(product));
-        });
-        if (!productResponseModelList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", productResponseModelList));
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
+//    public ResponseEntity<ResponseObject> findAllByCateId(Integer categoryId) {
+//        List<Product> productList = productRepository.findByCategoryId(categoryId);
+//        List<ProductResponseModel> productResponseModelList = new ArrayList<>();
+//        productList.forEach(product -> {
+//            productResponseModelList.add(convertToProductResponseModel(product));
+//        });
+//        if (!productResponseModelList.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", productResponseModelList));
+//        } else {
+//            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
+//        }
+//    }
+
+    public ResponseEntity<ResponseObject> findAllByFilters(
+            Integer categoryId, Double minRating, String sortOrder, int page, int size) {
+        if( sortOrder.toUpperCase().isEmpty()){
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Product> productPage = productRepository.findByFilters(categoryId, minRating, pageable);
+
+            List<ProductResponseModel> productResponseModelList = productPage.stream()
+                    .map(this::convertToProductResponseModel)
+                    .collect(Collectors.toList());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("products", productResponseModelList);
+            response.put("currentPage", productPage.getNumber());
+            response.put("totalItems", productPage.getTotalElements());
+            response.put("totalPages", productPage.getTotalPages());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Successfully", response));
+        }
+        else {
+            if (sortOrder.toUpperCase().equals("DESC")) {
+                Sort sort = Sort.by("sold").descending();
+                Pageable pageable = PageRequest.of(page, size, sort);
+
+                Page<Product> productPage = productRepository.findByFiltersDesc(categoryId, minRating, pageable);
+
+                List<ProductResponseModel> productResponseModelList = productPage.stream()
+                        .map(this::convertToProductResponseModel)
+                        .collect(Collectors.toList());
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("products", productResponseModelList);
+                response.put("currentPage", productPage.getNumber());
+                response.put("totalItems", productPage.getTotalElements());
+                response.put("totalPages", productPage.getTotalPages());
+
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("OK", "Successfully", response));
+            } else {
+                Sort sort = Sort.by("sold").ascending();
+                Pageable pageable = PageRequest.of(page, size, sort);
+
+                Page<Product> productPage = productRepository.findByFiltersAsc(categoryId, minRating, pageable);
+
+                List<ProductResponseModel> productResponseModelList = productPage.stream()
+                        .map(this::convertToProductResponseModel)
+                        .collect(Collectors.toList());
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("products", productResponseModelList);
+                response.put("currentPage", productPage.getNumber());
+                response.put("totalItems", productPage.getTotalElements());
+                response.put("totalPages", productPage.getTotalPages());
+
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("OK", "Successfully", response));
+            }
         }
     }
+
+
+
+
+    public ResponseEntity<ResponseObject> findAllByCateId(Integer categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productRepository.findByCategoryId(categoryId, pageable);
+
+        List<ProductResponseModel> productResponseModelList = productPage.stream()
+                .map(this::convertToProductResponseModel)
+                .collect(Collectors.toList());
+
+        // Tạo đối tượng phản hồi có thêm thông tin phân trang
+        if (!productResponseModelList.isEmpty()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("products", productResponseModelList);
+            response.put("currentPage", productPage.getNumber());
+            response.put("totalItems", productPage.getTotalElements());
+            response.put("totalPages", productPage.getTotalPages());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Successfully", response));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("Not found", "Not found", ""));
+        }
+    }
+
 
     public ResponseEntity<ResponseObject> findByName(String productName) {
         List<Product> productList = productRepository.findByProductName(productName);
