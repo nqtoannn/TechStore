@@ -40,4 +40,5 @@ public class Order extends BaseEntity{
             cascade = CascadeType.ALL)
     private Collection<OrderItem> orderItems;
     private String address;
+    private String note;
 }

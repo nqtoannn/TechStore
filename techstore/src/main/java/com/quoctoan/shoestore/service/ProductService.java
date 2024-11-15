@@ -51,6 +51,7 @@ public class ProductService {
         productModel.setDescription(product.getDescription());
         productModel.setImageUrl(product.getImageUrl());
         productModel.setCategory(product.getCategory().getCategoryName());
+        productModel.setBrand(product.getBrand().getName());
         productModel.setStatus(product.getStatus());
         productModel.setRating(product.getRating());
         productModel.setSold(product.getSold());

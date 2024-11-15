@@ -64,11 +64,11 @@ public class AuthenticationController {
       String errorHtml = "<!DOCTYPE html>"
               + "<html>"
               + "<head>"
-              + "<title>Thanh toán thất bại</title>"
+              + "<title> Xác minh thất bại</title>"
               + "</head>"
               + "<body>"
-              + "<h1>Thanh toán thất bại</h1>"
-              + "<p>Đã có lỗi xảy ra trong quá trình thanh toán.</p>"
+              + "<h1>Xác minh thất bại</h1>"
+              + "<p>Đã có lỗi xảy ra trong quá trình xác minh.</p>"
               + "</body>"
               + "</html>";
       return new ResponseEntity<>(errorHtml, HttpStatus.BAD_REQUEST);

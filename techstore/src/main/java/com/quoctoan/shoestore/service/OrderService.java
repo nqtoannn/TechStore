@@ -117,6 +117,7 @@ public class OrderService {
                 orderItemModel.setProductItemId(orderItem.getProductItem().getId());
                 orderItemModel.setProductItemUrl(orderItem.getProductItem().getImageUrl());
                 orderItemModel.setProductItemName(orderItem.getProductItem().getProductItemName());
+                orderItemModel.setProductName(orderItem.getProductItem().getProduct().getName());
                 return orderItemModel;
             }).collect(Collectors.toList());
             orderModel.setOrderItems(orderItemModels);
@@ -125,6 +126,38 @@ public class OrderService {
         if (!orderModelList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", orderModelList));
         } else {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> findOrderById(Integer orderId) {
+        Optional<Order> orderOptional  = orderRepository.findById(orderId);
+        if(orderOptional.isPresent()){
+            Order order = orderOptional.get();
+            OrderModel orderModel = new OrderModel();
+            orderModel.setId(order.getId());
+            orderModel.setOrderDate(order.getOrderDate());
+            orderModel.setTotalPrice(order.getTotalPrice());
+            orderModel.setPaymentMethod(order.getPaymentMethod().getPaymentMethodName());
+            orderModel.setOrderStatus(order.getOrderStatus().getStatus());
+            orderModel.setAddress(order.getAddress());
+            List<OrderItemModel> orderItemModels = order.getOrderItems().stream().map(orderItem -> {
+                OrderItemModel orderItemModel = new OrderItemModel();
+                orderItemModel.setOrderItemId(orderItem.getId());
+                orderItemModel.setPrice(orderItem.getPrice());
+                orderItemModel.setQuantity(orderItem.getQuantity());
+                orderItemModel.setProductItemId(orderItem.getProductItem().getId());
+                orderItemModel.setProductItemUrl(orderItem.getProductItem().getImageUrl());
+                orderItemModel.setProductItemName(orderItem.getProductItem().getProductItemName());
+                orderItemModel.setProductName(orderItem.getProductItem().getProduct().getName());
+                return orderItemModel;
+            }).collect(Collectors.toList());
+            orderModel.setOrderItems(orderItemModels);
+            List<OrderModel> orderModelList = new ArrayList<>();
+            orderModelList.add(orderModel);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", orderModelList));
+        }
+        else{
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
         }
     }

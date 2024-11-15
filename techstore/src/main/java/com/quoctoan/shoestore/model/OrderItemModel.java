@@ -16,4 +16,5 @@ public class OrderItemModel {
     private Integer productItemId;
     private String productItemUrl;
     private String productItemName;
+    private String productName;
 }

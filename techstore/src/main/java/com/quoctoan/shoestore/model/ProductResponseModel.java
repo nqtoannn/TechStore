@@ -21,6 +21,7 @@ public class ProductResponseModel{
     private String categoryName;
     private String imageUrl;
     private String category;
+    private String brand;
     private String status;
     private Integer rated;
     private Double rating;

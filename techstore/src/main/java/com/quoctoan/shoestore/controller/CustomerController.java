@@ -30,11 +30,15 @@ public class CustomerController {
         return orderService.order(json,request);
     }
 
-    @GetMapping("customer/orders/getAllOrdersByCustomerId/{customerId}")  //done
+    @GetMapping("customer/orders/getAllOrdersByCustomerId/{customerId}")
     public ResponseEntity<ResponseObject> findAllOrderByCustomerId(@PathVariable Integer customerId) {
         return orderService.findAllByCustomerId(customerId);
     }
 
+    @GetMapping("customer/orders/getOrderById/{orderId}")  //done
+    public ResponseEntity<ResponseObject> findOrderById(@PathVariable Integer orderId) {
+        return orderService.findOrderById(orderId);
+    }
     @PostMapping("customer/addToCart") //done
     public ResponseEntity<ResponseObject> addToCart(@RequestBody String json) {
         return cartService.addToCart(json);
