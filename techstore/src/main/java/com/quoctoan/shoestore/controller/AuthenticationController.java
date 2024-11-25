@@ -1,6 +1,8 @@
 package com.quoctoan.shoestore.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quoctoan.shoestore.entity.Order;
 import com.quoctoan.shoestore.entity.OrderStatus;
 import com.quoctoan.shoestore.model.AuthenticationRequest;
@@ -12,8 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -75,5 +82,20 @@ public class AuthenticationController {
     }
   }
 
+  @GetMapping("/login-url")
+  public ResponseEntity<String> getGoogleLoginUrl() {
+    String loginUrl = "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:8080/techstore/api/auth/oauth2/callback/google&response_type=code&client_id=733911543037-n7inen8gp4a2iko643jpdo25ogoejuv1.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&access_type=offline";
+    return ResponseEntity.ok(loginUrl);
+  }
+
+  @GetMapping("/oauth2/callback/google")
+  public ResponseEntity<Void> grantCode(@RequestParam("code") String code, @RequestParam("scope") String scope, @RequestParam("authuser") String authUser, @RequestParam("prompt") String prompt) throws JsonProcessingException {
+    AuthenticationResponse authenticationResponse = service.processGrantCode(code);
+    ObjectMapper objectMapper = new ObjectMapper();
+    String jsonResponse = objectMapper.writeValueAsString(authenticationResponse);
+    String encodedResponse = URLEncoder.encode(jsonResponse, StandardCharsets.UTF_8);
+    String url = "http://localhost:3000/oauth?authResponse=" + encodedResponse;
+    return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(url)).build();
+  }
 
 }

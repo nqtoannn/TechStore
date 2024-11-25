@@ -25,7 +25,7 @@
                                                     <table cellspacing="0" width="100%" cellpadding="0">
                                                         <tr>
                                                             <td align="center" style="font-size:0">
-                                                                <img alt="" width="560" src="https://hsmwoq.stripocdn.email/content/guids/CABINET_a509ab7c9e0d1c671e5b5a526d58ca13025a5eecccc1ded0a5d5b493cdf99b32/images/shoe_store_1.png" class="adapt-img" height="187" layout="responsive"></img>
+                                                                <img alt="" width="560" src="https://fnikkiv.stripocdn.email/content/guids/CABINET_b5ca9a0f8938febe550aecde30616745480aed4419f2661b4348a7c849dd1afb/images/shoe_store.png" class="adapt-img" height="187" layout="responsive"></img>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -55,7 +55,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td align="center" class="es-p10b es-m-txt-c">
-                                                                <h1 style="font-size:46px;line-height:46px"Xác nhận tài khoản của bạn!</h1>
+                                                                <h1 style="font-size:46px;line-height:46px" > Xác nhận tài khoản của bạn!</h1>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -97,12 +97,12 @@
                                                         </tr>
                                                         <tr>
                                                             <td align="center" class="es-p20t es-p20b">
-                                                                <p style="line-height:150%"><span style="font-size:12px;line-height:150%">© 2020 ShoeStore<br>Vui lòng không trả lời email này.</span></p>
+                                                                <p style="line-height:150%"><span style="font-size:12px;line-height:150%">© 2020 TechStore<br>Vui lòng không trả lời email này.</span></p>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td align="center" class="es-p20t es-p20b">
-                                                                <p style="line-height:150%"><span style="font-size:12px;line-height:150%">ShoeStore, 123 Example St, Example City, EX 12345, Viet Nam</span></p>
+                                                                <p style="line-height:150%"><span style="font-size:12px;line-height:150%">TechStore, 123 Example St, Example City, EX 12345, Viet Nam</span></p>
                                                             </td>
                                                         </tr>
                                                     </table>

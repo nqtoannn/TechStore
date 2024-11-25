@@ -114,7 +114,7 @@
                                                             <td class="esd-block-text es-p20t es-p5b es-p20r es-p20l es-m-txt-l" align="left"><h2>Dear ${userName}!,</h2></td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="esd-block-text es-p10t es-p20r es-p20l" align="left"><p>Chào mừng bạn đến với Shoe Store,</p></td>
+                                                            <td class="esd-block-text es-p10t es-p20r es-p20l" align="left"><p>Chào mừng bạn đến với Tech Store,</p></td>
                                                         </tr>
                                                         <tr>
                                                             <td class="esd-block-text es-p10t es-p5b es-p20r es-p20l" align="left"><ul><li><p>Dưới đây là thông tin tài khoản của bạn</p>

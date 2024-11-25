@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +39,8 @@ public class OrderService {
     CartRepository cartRepository;
     @Autowired
     PaymentService paymentService;
+    @Autowired
+    StorageService storageService;
 
     public ResponseEntity<ResponseObject> findAllOrders() {
         List<Order> orderList = orderRepository.findAll();
@@ -49,6 +52,7 @@ public class OrderService {
             orderModel.setPaymentMethod(order.getPaymentMethod().getPaymentMethodName());
             orderModel.setOrderStatus(order.getOrderStatus().getStatus());
             orderModel.setAddress(order.getAddress());
+            orderModel.setNote(order.getNote());
             List<OrderItemModel> orderItemModels = order.getOrderItems().stream().map(orderItem -> {
                 OrderItemModel orderItemModel = new OrderItemModel();
                 orderItemModel.setOrderItemId(orderItem.getId());
@@ -57,6 +61,7 @@ public class OrderService {
                 orderItemModel.setProductItemId(orderItem.getProductItem().getId());
                 orderItemModel.setProductItemUrl(orderItem.getProductItem().getImageUrl());
                 orderItemModel.setProductItemName(orderItem.getProductItem().getProductItemName());
+                orderItemModel.setProductName(orderItem.getProductItem().getProduct().getName());
                 return orderItemModel;
             }).collect(Collectors.toList());
             orderModel.setOrderItems(orderItemModels);
@@ -70,7 +75,16 @@ public class OrderService {
     }
 
     public ResponseEntity<ResponseObject> findAllByStatusId(Integer id) {
-        List<Order> orderList = orderRepository.findAllByStatusId(id);
+        if(id == 0){
+            return findAllOrders();
+        }
+        List<Order> orderList = new ArrayList<>();
+        if(id == 4){
+            orderList = orderRepository.findSuccessOrder();
+        }
+        else {
+            orderList = orderRepository.findAllByStatusId(id);
+        }
         List<OrderModel> orderModelList = orderList.stream().map(order -> {
             OrderModel orderModel = new OrderModel();
             orderModel.setId(order.getId());
@@ -79,6 +93,7 @@ public class OrderService {
             orderModel.setPaymentMethod(order.getPaymentMethod().getPaymentMethodName());
             orderModel.setOrderStatus(order.getOrderStatus().getStatus());
             orderModel.setAddress(order.getAddress());
+            orderModel.setNote(order.getNote());
             List<OrderItemModel> orderItemModels = order.getOrderItems().stream().map(orderItem -> {
                 OrderItemModel orderItemModel = new OrderItemModel();
                 orderItemModel.setOrderItemId(orderItem.getId());
@@ -87,6 +102,7 @@ public class OrderService {
                 orderItemModel.setProductItemId(orderItem.getProductItem().getId());
                 orderItemModel.setProductItemUrl(orderItem.getProductItem().getImageUrl());
                 orderItemModel.setProductItemName(orderItem.getProductItem().getProductItemName());
+                orderItemModel.setProductName(orderItem.getProductItem().getProduct().getName());
                 return orderItemModel;
             }).collect(Collectors.toList());
             orderModel.setOrderItems(orderItemModels);
@@ -109,6 +125,7 @@ public class OrderService {
             orderModel.setPaymentMethod(order.getPaymentMethod().getPaymentMethodName());
             orderModel.setOrderStatus(order.getOrderStatus().getStatus());
             orderModel.setAddress(order.getAddress());
+            orderModel.setNote(order.getNote());
             List<OrderItemModel> orderItemModels = order.getOrderItems().stream().map(orderItem -> {
                 OrderItemModel orderItemModel = new OrderItemModel();
                 orderItemModel.setOrderItemId(orderItem.getId());
@@ -141,6 +158,7 @@ public class OrderService {
             orderModel.setPaymentMethod(order.getPaymentMethod().getPaymentMethodName());
             orderModel.setOrderStatus(order.getOrderStatus().getStatus());
             orderModel.setAddress(order.getAddress());
+            orderModel.setNote(order.getNote());
             List<OrderItemModel> orderItemModels = order.getOrderItems().stream().map(orderItem -> {
                 OrderItemModel orderItemModel = new OrderItemModel();
                 orderItemModel.setOrderItemId(orderItem.getId());
@@ -285,16 +303,22 @@ public class OrderService {
         JsonMapper jsonMapper = new JsonMapper();
         Integer statusCode;
         Integer orderId;
+
         try {
             jsonNode = jsonMapper.readTree(json);
             orderId = jsonNode.get("orderId") != null ? jsonNode.get("orderId").asInt() : null;
             statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
+            String note = jsonNode.get("note") != null ?
+                    jsonNode.get("note").asText() : "";
             Optional<Order> orderOptional = orderRepository.findById(orderId);
             if (orderOptional.isPresent()) {
                 Order order = orderOptional.get();
                 OrderStatus orderStatus = new OrderStatus();
                 orderStatus.setId(statusCode);
                 order.setOrderStatus(orderStatus);
+                if(!note.isEmpty()){
+                    order.setNote(note);
+                }
                 orderRepository.save(order);
             }
             else
@@ -307,6 +331,50 @@ public class OrderService {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
     }
 
+    public ResponseEntity<Object> confirmOrderDelivery(String json) {
+        JsonNode jsonNode;
+        JsonMapper jsonMapper = new JsonMapper();
+        Integer statusCode;
+        Integer orderId;
+        try {
+            jsonNode = jsonMapper.readTree(json);
+            orderId = jsonNode.get("orderId") != null ? jsonNode.get("orderId").asInt() : null;
+            statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
+            String note = jsonNode.get("note") != null ?
+                    jsonNode.get("note").asText() : "";
+            Optional<Order> orderOptional = orderRepository.findById(orderId);
+            if (orderOptional.isPresent()) {
+                Order order = orderOptional.get();
+                OrderStatus orderStatus = new OrderStatus();
+                orderStatus.setId(statusCode);
+                order.setOrderStatus(orderStatus);
+                if(!note.isEmpty()){
+                    order.setNote(note);
+                }
+                orderRepository.save(order);
+            }
+            else
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ERROR", "Have error when update status code order", ""));
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
+    }
 
+    public String uploadImage(MultipartFile file, String namePath, Integer orderId) {
+        String imageUrl = storageService.uploadImages(file, namePath);
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+        if(orderOptional.isPresent()){
+            Order order = orderOptional.get();
+            order.setNote(imageUrl);
+            OrderStatus orderStatus = new OrderStatus();
+            orderStatus.setId(4);
+            order.setOrderStatus(orderStatus);
+            orderRepository.save(order);
+        }
+        return imageUrl;
+    }
 
 }

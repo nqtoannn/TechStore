@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.quoctoan.shoestore.Enum.Role;
 import com.quoctoan.shoestore.Enum.TokenType;
 import com.quoctoan.shoestore.entity.*;
@@ -17,19 +19,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,8 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final EmailSendService emailSendService;
+
+
 
   public AuthenticationResponse register(RegisterRequest request) {
     var user = User.builder()
@@ -246,5 +251,81 @@ public class AuthenticationService {
     }
   }
 
+  public AuthenticationResponse processGrantCode(String code) {
+    String accessToken = getOauthAccessTokenGoogle(code);
+    User googleUser = getProfileDetailsGoogle(accessToken);
+    Optional<User> userOptional = userRepository.findByEmail(googleUser.getEmail());
+    if(userOptional.isPresent()){
+      User user = userOptional.get();
+      var jwtToken = jwtService.generateToken(user);
+      var refreshToken = jwtService.generateRefreshToken(user);
+      saveUserToken(user, jwtToken);
+      return AuthenticationResponse.builder()
+              .role(user.getRole().toString())
+              .accountId(user.getId())
+              .accessToken(jwtToken)
+              .refreshToken(refreshToken)
+              .build();
+    }else {
+      var user = User.builder()
+              .email(googleUser.getEmail())
+              .role(Role.CUSTOMER)
+              .status("ACTIVE")
+              .phoneNumber(googleUser.getPhoneNumber())
+              .fullName(googleUser.getFullName())
+              .build();
+      var savedUser = userRepository.save(user);
+      var jwtToken = jwtService.generateToken(user);
+      var refreshToken = jwtService.generateRefreshToken(user);
+      saveUserToken(savedUser, jwtToken);
+      return AuthenticationResponse.builder()
+              .role(user.getRole().toString())
+              .accountId(user.getId())
+              .accessToken(jwtToken)
+              .refreshToken(refreshToken)
+              .build();
+    }
+  }
 
+  private String getOauthAccessTokenGoogle(String code) {
+    RestTemplate restTemplate = new RestTemplate();
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("code", code);
+    params.add("redirect_uri", "http://localhost:8080/techstore/api/auth/oauth2/callback/google");
+    params.add("client_id", "733911543037-n7inen8gp4a2iko643jpdo25ogoejuv1.apps.googleusercontent.com");
+    params.add("client_secret", "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");
+    params.add("scope", "https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile");
+    params.add("scope", "https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email");
+    params.add("scope", "openid");
+    params.add("grant_type", "authorization_code");
+
+    HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, httpHeaders);
+
+    String url = "https://oauth2.googleapis.com/token";
+    String response = restTemplate.postForObject(url, requestEntity, String.class);
+    JsonObject jsonObject = new Gson().fromJson(response, JsonObject.class);
+
+    return jsonObject.get("access_token").toString().replace("\"", "");
+  }
+  private User getProfileDetailsGoogle(String accessToken) {
+    RestTemplate restTemplate = new RestTemplate();
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setBearerAuth(accessToken);
+
+    HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
+
+    String url = "https://www.googleapis.com/oauth2/v2/userinfo";
+    ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+    JsonObject jsonObject = new Gson().fromJson(response.getBody(), JsonObject.class);
+
+    User user = new User();
+    user.setEmail(jsonObject.get("email").toString().replace("\"", ""));
+    String name = jsonObject.get("name").toString().replace("\"", "");
+    String given_name = jsonObject.get("given_name").toString().replace("\"", "");
+    user.setFullName(name + " "+ given_name);
+    user.setPassword(UUID.randomUUID().toString());
+    return user;
+  }
 }

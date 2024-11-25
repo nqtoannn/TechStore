@@ -23,4 +23,5 @@ public class OrderModel {
     private String orderStatus;
     private LocalDate orderDate;
     private String address;
+    private String note;
 }

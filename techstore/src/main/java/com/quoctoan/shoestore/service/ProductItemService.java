@@ -112,9 +112,9 @@ public class ProductItemService {
 
     }
 
-    public String uploadImage(MultipartFile file, String namePath, Integer serviceHairId) {
+    public String uploadImage(MultipartFile file, String namePath, Integer productItemId) {
         String imageUrl = storageService.uploadImages(file, namePath);
-        productItemRepository.updateImage(imageUrl, serviceHairId);
+        productItemRepository.updateImage(imageUrl, productItemId);
         return imageUrl;
     }
 
