@@ -15,9 +15,9 @@ import lombok.Setter;
 public class UserModel {
     private Integer id;
     private String email;
-    private String password;
     private String role;
     private String fullName;
     private String phoneNumber;
     private String status;
+    private String createAt;
 }

@@ -119,7 +119,7 @@
                                                         <tr>
                                                             <td class="esd-block-text es-p10t es-p5b es-p20r es-p20l" align="left"><ul><li><p>Dưới đây là thông tin tài khoản của bạn</p>
                                                                     <li><p>Tên người dùng: ${userName}</p></ul><p></p>
-                                                                    <li><p>Mật khẩu: ${password}</p></ul><p></p>
+                                                                    <li><p>Mật khẩu: ${password}</p></li><p></p>
                                                             </td>
                                                         </tr>
                                                         </tbody>

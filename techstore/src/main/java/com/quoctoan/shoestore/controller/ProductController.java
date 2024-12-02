@@ -40,6 +40,11 @@ public class ProductController {
         return productService.findAll(page, size);
     }
 
+    @GetMapping("products/findAllProducts")
+    public ResponseEntity<ResponseObject> findAll() {
+        return productService.findAllProduct();
+    }
+
     @GetMapping("brand/findAll")
     public ResponseEntity<ResponseObject> getAllBrand(){
         return brandService.getAllBrands();
@@ -60,8 +65,6 @@ public class ProductController {
         return productService.findAllByFilters(categoryId, minRating, sortOrder, page, size);
     }
 
-
-
     @GetMapping("products/category/{id}")
     public ResponseEntity<ResponseObject> findAllByCateId(
             @PathVariable Integer id,
@@ -69,7 +72,6 @@ public class ProductController {
             @RequestParam(defaultValue = "10") int size) {
         return productService.findAllByCateId(id, page, size);
     }
-
 
     @GetMapping("products/findById/{id}")
     public ResponseEntity<ResponseObject> findById(@PathVariable Integer id) {

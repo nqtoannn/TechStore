@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class User implements UserDetails {
     private String fullName;
     private String phoneNumber;
     private String status;
+    private LocalDate createAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

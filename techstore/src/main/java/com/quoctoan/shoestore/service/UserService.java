@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,18 +27,25 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     AddressRepository addressRepository;
+
+    public UserModel convertUserToUserModel(User user){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        UserModel userModel = new UserModel();
+        userModel.setId(user.getId());
+        userModel.setEmail(user.getEmail());
+        userModel.setStatus(user.getStatus());
+        userModel.setFullName(user.getFullName());
+        userModel.setPhoneNumber(user.getPhoneNumber());
+        userModel.setCreateAt(user.getCreateAt().format(formatter));
+        return userModel;
+    }
     public ResponseEntity<ResponseObject> findAllCustomer() {
         List<User> userList = new ArrayList<>();
+
         userList = userRepository.findAllCustomer();
         List<UserModel> userModelList = userList.stream()
                 .map(user -> {
-                    UserModel userModel = new UserModel();
-                    userModel.setId(user.getId());
-                    userModel.setEmail(user.getEmail());
-                    userModel.setPassword(user.getPassword());
-                    userModel.setStatus(user.getStatus());
-                    userModel.setFullName(user.getFullName());
-                    userModel.setPhoneNumber(user.getPhoneNumber());
+                    UserModel userModel = convertUserToUserModel(user);
                     return userModel;
                 })
                 .toList();
@@ -51,17 +60,7 @@ public class UserService {
         List<User> userList = new ArrayList<>();
         userList = userRepository.findAllEmployee();
         List<UserModel> userModelList = userList.stream()
-                .map(user -> {
-                    UserModel userModel = new UserModel();
-                    userModel.setId(user.getId());
-                    userModel.setEmail(user.getEmail());
-                    userModel.setRole(user.getRole().toString());
-                    userModel.setPassword(user.getPassword());
-                    userModel.setStatus(user.getStatus());
-                    userModel.setFullName(user.getFullName());
-                    userModel.setPhoneNumber(user.getPhoneNumber());
-                    return userModel;
-                })
+                .map(this::convertUserToUserModel)
                 .toList();
         if (!userModelList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", userModelList));
@@ -74,13 +73,7 @@ public class UserService {
         Optional<User> customer = userRepository.findById(customerId);
         List<UserModel> userList = new ArrayList<>();
         if (customer.isPresent()) {
-            UserModel userModel = new UserModel();
-            userModel.setId(customer.get().getId());
-            userModel.setEmail(customer.get().getUsername());
-            userModel.setStatus(customer.get().getStatus());
-            userModel.setFullName(customer.get().getFullName());
-            userModel.setPhoneNumber(customer.get().getPhoneNumber());
-            userList.add(userModel);
+            userList.add(convertUserToUserModel(customer.get()));
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", userList));
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));
@@ -90,15 +83,7 @@ public class UserService {
         Optional<User> user = userRepository.findById(employeeId);
         List<UserModel> userList = new ArrayList<>();
         if (user.isPresent()) {
-            UserModel userModel = new UserModel();
-            userModel.setId(user.get().getId());
-            userModel.setEmail(user.get().getEmail());
-            userModel.setRole(user.get().getRole().toString());
-            userModel.setPassword(user.get().getPassword());
-            userModel.setStatus(user.get().getStatus());
-            userModel.setFullName(user.get().getFullName());
-            userModel.setPhoneNumber(user.get().getPhoneNumber());
-            userList.add(userModel);
+            userList.add(convertUserToUserModel(user.get()));
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", userList));
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Not found", "Not found", ""));

@@ -32,6 +32,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -54,6 +55,7 @@ public class AuthenticationService {
             .status("DEACTIVE")
             .phoneNumber("null")
             .fullName("null")
+            .createAt(LocalDate.now())
         .build();
     var savedUser = userRepository.save(user);
     var jwtToken = jwtService.generateToken(user);
@@ -168,6 +170,7 @@ public class AuthenticationService {
               .fullName(fullName)
               .phoneNumber(phoneNumber)
               .status("ACTIVE")
+              .createAt(LocalDate.now())
               .build();
       var savedUser = userRepository.save(user);
       if (savedUser.getPassword() != null) {
@@ -242,7 +245,7 @@ public class AuthenticationService {
         Map<String, Object> model = new HashMap<>();
         model.put("url", url);
         String[] cc = {};
-        emailSendService.sendMail(user.getEmail(), cc, "Đặt lại mật khẩu cho trang web ShoeStore", model);
+        emailSendService.sendMail(user.getEmail(), cc, "Đặt lại mật khẩu cho trang web TechStore", model);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", url));
         }
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", "Error", ""));
@@ -273,6 +276,7 @@ public class AuthenticationService {
               .status("ACTIVE")
               .phoneNumber(googleUser.getPhoneNumber())
               .fullName(googleUser.getFullName())
+              .createAt(LocalDate.now())
               .build();
       var savedUser = userRepository.save(user);
       var jwtToken = jwtService.generateToken(user);

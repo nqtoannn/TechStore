@@ -28,6 +28,23 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "GROUP BY YEAR(o.orderDate), MONTH(o.orderDate)")
     List<Object[]> findMonthlyRevenueBetweenDates(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    @Query("SELECT DATE(o.orderDate), SUM(o.totalPrice) " +
+            "FROM Order o " +
+            "WHERE (o.orderDate >= :startDate AND o.orderDate <= :endDate) AND (o.orderStatus.id = 5 OR o.orderStatus.id = 4 OR o.orderStatus.id = 7)" +
+            "GROUP BY DATE(o.orderDate)")
+    List<Object[]> findDailyRevenueBetweenByDate(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT p.id AS product_id, p.name AS product_name, " +
+            "SUM(oi.quantity * oi.price) AS total_sold, SUM(oi.quantity) AS total_quantity " +
+            "FROM Product p " +
+            "JOIN ProductItem pi ON pi.id = p.id " +
+            "JOIN OrderItem oi ON oi.productItem.id = pi.id " +
+            "JOIN Order o ON oi.id = o.id " +
+            "WHERE o.orderStatus.id IN (4, 5) " +
+            "GROUP BY p.id, p.name " +
+            "ORDER BY total_sold DESC " +
+            "LIMIT 1000")
+    List<Object[]> getProductSales();
 
 
 }

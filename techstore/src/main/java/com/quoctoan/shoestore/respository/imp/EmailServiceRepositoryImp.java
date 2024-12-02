@@ -35,13 +35,13 @@ public class EmailServiceRepositoryImp implements IEmailServiceRepository {
             mimeMessageHelper.setCc(cc);
             mimeMessageHelper.setSubject(subject);
             Template t;
-            if (subject.equals("Tài khoản truy cập ShoeStore của bạn đã được tạo")) {
+            if (subject.equals("Tài khoản truy cập TechStore của bạn đã được tạo")) {
                 t = config.getTemplate("register.ftl");
             }
             else if (subject.equals("Thông báo sản phẩm mới")) {
                 t = config.getTemplate("email-template.ftl");
             }
-            else if (subject.equals("Đặt lại mật khẩu cho trang web ShoeStore")) {
+            else if (subject.equals("Đặt lại mật khẩu cho trang web TechStore")) {
                 t = config.getTemplate("forgetPassword.ftl");
             }
             else if (subject.equals("Xác nhận tài khoản của bạn")) {

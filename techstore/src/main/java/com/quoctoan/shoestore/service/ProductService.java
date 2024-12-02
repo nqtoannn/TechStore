@@ -117,6 +117,20 @@ public class ProductService {
         }
     }
 
+    public ResponseEntity<ResponseObject> findAllProduct() {
+        List<Product> productList = productRepository.findAll();
+        if(!productList.isEmpty()){
+            List<ProductResponseModel> productResponseModelList = new ArrayList<>();
+            productList.forEach(product -> {
+                productResponseModelList.add(convertToProductResponseModel(product));
+            });
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Successfully", productResponseModelList));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("Not found", "Not found", ""));
+        }
+    }
 
     public ResponseEntity<ResponseObject> findAllWithAllStatus() {
         List<Product> productList = productRepository.findAll();

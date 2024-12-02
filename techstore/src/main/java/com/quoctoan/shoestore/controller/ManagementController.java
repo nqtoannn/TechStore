@@ -84,6 +84,16 @@ public class ManagementController {
         return revenueService.getRevenueProductBetweenDate(startDate, endDate);
     }
 
+    @GetMapping("revenueByProduct")
+    public ResponseEntity<ResponseObject> findRevenueByProduct() {
+        return revenueService.getRevenueByProduct();
+    }
+
+    @GetMapping("revenueProductByDate/between")
+    public ResponseEntity<ResponseObject> findRevenueByDates(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return revenueService.getRevenueProductBetweenByDate(startDate, endDate);
+    }
     //#################### Brand #####################
     @PostMapping("brand/add")
     public ResponseEntity<ResponseObject> addBrand(@RequestBody String json){

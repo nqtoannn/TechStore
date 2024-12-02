@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.quoctoan.shoestore.entity.Product;
 import com.quoctoan.shoestore.entity.ProductItem;
-import com.quoctoan.shoestore.model.MonthlyRevenue;
-import com.quoctoan.shoestore.model.ProductItemModel;
-import com.quoctoan.shoestore.model.ProductResponseModel;
-import com.quoctoan.shoestore.model.ResponseObject;
+import com.quoctoan.shoestore.model.*;
 import com.quoctoan.shoestore.respository.OrderRepository;
 import com.quoctoan.shoestore.respository.ProductItemRepository;
 import com.quoctoan.shoestore.respository.PromotionRepository;
@@ -76,6 +73,41 @@ public class RevenueService {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", monthlyRevenues));
     }
 
+    public ResponseEntity<ResponseObject> getRevenueProductBetweenByDate(
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        List<Object[]> results = orderRepository.findDailyRevenueBetweenByDate(startDate, endDate);
+
+        // Map để lưu doanh thu theo ngày
+        Map<LocalDate, Double> revenueMap = new HashMap<>();
+        for (Object[] result : results) {
+            java.sql.Date sqlDate = (java.sql.Date) result[0];
+            LocalDate date = sqlDate.toLocalDate(); // Chuyển đổi đúng cách
+            Double totalRevenue = (Double) result[1];
+            revenueMap.put(date, totalRevenue);
+        }
+
+        List<DailyRevenue> dailyRevenues = new ArrayList<>();
+        LocalDate current = startDate;
+
+        while (!current.isAfter(endDate)) {
+            if (revenueMap.containsKey(current)) {
+                dailyRevenues.add(new DailyRevenue(current, revenueMap.get(current)));
+            } else {
+                dailyRevenues.add(new DailyRevenue(current, 0.0));
+            }
+            current = current.plusDays(1); // Tăng lên 1 ngày
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Successfully", dailyRevenues));
+    }
+
+    public ResponseEntity<ResponseObject> getRevenueByProduct(){
+        List<Object[] > results = orderRepository.getProductSales();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully",results));
+    }
     public ResponseEntity<ResponseObject> getMostPurchased(){
         List<ProductItem> productList = productItemRepository.getMostPruchased();
         List<ProductResponseModel> productResponseModelList = new ArrayList<>();
