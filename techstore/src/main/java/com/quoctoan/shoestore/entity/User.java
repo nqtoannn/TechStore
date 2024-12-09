@@ -38,6 +38,9 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Token> tokens;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Transaction> transactions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
