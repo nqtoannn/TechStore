@@ -30,27 +30,33 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p WHERE "
             + "(:categoryId IS NULL OR p.category.id = :categoryId) AND "
+            + "(:brandId IS NULL OR p.brand.id = :brandId) AND "
             + "(:minRating IS NULL OR p.rating >= :minRating) "
             + "ORDER BY p.sold DESC")
     Page<Product> findByFiltersDesc(
             @Param("categoryId") Integer categoryId,
+            @Param("brandId") Integer brandId,
             @Param("minRating") Double minRating,
             Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE "
             + "(:categoryId IS NULL OR p.category.id = :categoryId) AND "
+            + "(:brandId IS NULL OR p.brand.id = :brandId) AND "
             + "(:minRating IS NULL OR p.rating >= :minRating)")
     Page<Product> findByFilters(
             @Param("categoryId") Integer categoryId,
+            @Param("brandId") Integer brandId,
             @Param("minRating") Double minRating,
             Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE "
             + "(:categoryId IS NULL OR p.category.id = :categoryId) AND "
+            + "(:brandId IS NULL OR p.brand.id = :brandId) AND "
             + "(:minRating IS NULL OR p.rating >= :minRating) "
             + "ORDER BY p.sold ASC")
     Page<Product> findByFiltersAsc(
             @Param("categoryId") Integer categoryId,
+            @Param("brandId") Integer brandId,
             @Param("minRating") Double minRating,
             Pageable pageable);
 

@@ -203,7 +203,6 @@ public class OrderService {
             Optional<User> user = userRepository.findById(customerId);
             User newUser = new User();
             newUser.setId(user.get().getId());
-
             Optional<PaymentMethod> paymentMethodModel = paymentMethodRepository.findById(payId);
             PaymentMethod paymentMethod = new PaymentMethod();
             paymentMethod.setId(paymentMethodModel.get().getId());
@@ -229,7 +228,6 @@ public class OrderService {
             List<Integer> productItemIdList = new ArrayList<>();
             if (orderItemList.isArray()) {
                 for (JsonNode orderItemJson : orderItemList) {
-
                     OrderItem orderItem = new OrderItem();
                     Optional<ProductItem> productItemModel = productItemRepository.findById(orderItemJson.get("productItemId").asInt());
                     ProductItem productItemSave = productItemModel.get();
@@ -283,6 +281,22 @@ public class OrderService {
         }
     }
 
+    public ResponseEntity<ResponseObject> getUrlVnPayById(Integer orderId, HttpServletRequest request){
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if(!optionalOrder.isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseObject("BAD_REQUEST", "Can not find order with this id", ""));
+        }
+        if(!optionalOrder.get().getPaymentMethod().getPaymentMethodName().equals("VN-Pay")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseObject("BAD_REQUEST", "Wrong payment method", ""));
+        }
+        Order order = optionalOrder.get();
+        String url = paymentService.createVnPayPaymentforOrder(order.getTotalPrice(),orderId,request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Successfully", url));
+    }
+
     public void deleteCartByCustomerProductItem(Integer customerId, List<Integer> productItemIdList) {
         productItemIdList.forEach(id -> {
             try {
@@ -301,13 +315,10 @@ public class OrderService {
     public ResponseEntity<Object> updateStatusOrder(String json) {
         JsonNode jsonNode;
         JsonMapper jsonMapper = new JsonMapper();
-        Integer statusCode;
-        Integer orderId;
-
         try {
             jsonNode = jsonMapper.readTree(json);
-            orderId = jsonNode.get("orderId") != null ? jsonNode.get("orderId").asInt() : null;
-            statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
+            Integer orderId = jsonNode.get("orderId") != null ? jsonNode.get("orderId").asInt() : null;
+            Integer statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
             String note = jsonNode.get("note") != null ?
                     jsonNode.get("note").asText() : "";
             Optional<Order> orderOptional = orderRepository.findById(orderId);
@@ -320,6 +331,18 @@ public class OrderService {
                     order.setNote(note);
                 }
                 orderRepository.save(order);
+                if (statusCode == 8) {
+                    List<OrderItem> orderItemList = order.getOrderItems().stream().toList();
+                    for (OrderItem orderItem : orderItemList) {
+                        Optional<ProductItem> productItemOptional = productItemRepository.findById(orderItem.getProductItem().getId());
+                        if (productItemOptional.isPresent()){
+                            ProductItem productItem = productItemOptional.get();
+                            productItem.setQuantityInStock(productItem.getQuantityInStock()+orderItem.getQuantity());
+                            productItemRepository.save(productItem);
+                        }
+                    }
+                }
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
             }
             else
                 return ResponseEntity.status(HttpStatus.OK)
@@ -328,39 +351,6 @@ public class OrderService {
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
-    }
-
-    public ResponseEntity<Object> confirmOrderDelivery(String json) {
-        JsonNode jsonNode;
-        JsonMapper jsonMapper = new JsonMapper();
-        Integer statusCode;
-        Integer orderId;
-        try {
-            jsonNode = jsonMapper.readTree(json);
-            orderId = jsonNode.get("orderId") != null ? jsonNode.get("orderId").asInt() : null;
-            statusCode = jsonNode.get("statusCode") != null ? jsonNode.get("statusCode").asInt() : -1;
-            String note = jsonNode.get("note") != null ?
-                    jsonNode.get("note").asText() : "";
-            Optional<Order> orderOptional = orderRepository.findById(orderId);
-            if (orderOptional.isPresent()) {
-                Order order = orderOptional.get();
-                OrderStatus orderStatus = new OrderStatus();
-                orderStatus.setId(statusCode);
-                order.setOrderStatus(orderStatus);
-                if(!note.isEmpty()){
-                    order.setNote(note);
-                }
-                orderRepository.save(order);
-            }
-            else
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("ERROR", "Have error when update status code order", ""));
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", ""));
     }
 
     public String uploadImage(MultipartFile file, String namePath, Integer orderId) {

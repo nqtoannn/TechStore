@@ -248,7 +248,7 @@ public class AuthenticationService {
         emailSendService.sendMail(user.getEmail(), cc, "Đặt lại mật khẩu cho trang web TechStore", model);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully", url));
         }
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", "Error", ""));
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", "Email does not exist", ""));
       } catch (JsonProcessingException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseObject("500", e.getMessage(), ""));
     }

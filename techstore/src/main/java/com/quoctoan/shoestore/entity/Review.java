@@ -30,4 +30,6 @@ public class Review extends BaseEntity{
     private User customer;
     @Column(name = "responses")
     private String responses;
+    @Column(name = "status")
+    private String status;
 }

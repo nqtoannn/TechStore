@@ -172,10 +172,10 @@ public class ProductService {
 //    }
 
     public ResponseEntity<ResponseObject> findAllByFilters(
-            Integer categoryId, Double minRating, String sortOrder, int page, int size) {
+            Integer categoryId, Integer brandId, Double minRating, String sortOrder, int page, int size) {
         if( sortOrder.toUpperCase().isEmpty()){
             Pageable pageable = PageRequest.of(page, size);
-            Page<Product> productPage = productRepository.findByFilters(categoryId, minRating, pageable);
+            Page<Product> productPage = productRepository.findByFilters(categoryId, brandId, minRating, pageable);
 
             List<ProductResponseModel> productResponseModelList = productPage.stream()
                     .map(this::convertToProductResponseModel)
@@ -195,7 +195,7 @@ public class ProductService {
                 Sort sort = Sort.by("sold").descending();
                 Pageable pageable = PageRequest.of(page, size, sort);
 
-                Page<Product> productPage = productRepository.findByFiltersDesc(categoryId, minRating, pageable);
+                Page<Product> productPage = productRepository.findByFiltersDesc(categoryId, brandId, minRating, pageable);
 
                 List<ProductResponseModel> productResponseModelList = productPage.stream()
                         .map(this::convertToProductResponseModel)
@@ -213,7 +213,7 @@ public class ProductService {
                 Sort sort = Sort.by("sold").ascending();
                 Pageable pageable = PageRequest.of(page, size, sort);
 
-                Page<Product> productPage = productRepository.findByFiltersAsc(categoryId, minRating, pageable);
+                Page<Product> productPage = productRepository.findByFiltersAsc(categoryId,brandId, minRating, pageable);
 
                 List<ProductResponseModel> productResponseModelList = productPage.stream()
                         .map(this::convertToProductResponseModel)

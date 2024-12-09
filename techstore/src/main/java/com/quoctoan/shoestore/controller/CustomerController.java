@@ -25,9 +25,14 @@ public class CustomerController {
     @Autowired
     private ReviewService reviewService;
 
-    @PostMapping("customer/order") //Done
+    @PostMapping("customer/order")
     public ResponseEntity<ResponseObject> order(@RequestBody String json, HttpServletRequest request) {
         return orderService.order(json,request);
+    }
+
+    @GetMapping("customer/getOrderPaymentUrl/{orderId}")
+    public ResponseEntity<ResponseObject> getOrderPaymentUrl(@PathVariable Integer orderId, HttpServletRequest request) {
+        return orderService.getUrlVnPayById(orderId,request);
     }
 
     @GetMapping("customer/orders/getAllOrdersByCustomerId/{customerId}")

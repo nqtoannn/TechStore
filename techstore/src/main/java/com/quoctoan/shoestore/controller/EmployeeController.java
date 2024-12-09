@@ -2,6 +2,7 @@ package com.quoctoan.shoestore.controller;
 
 import com.quoctoan.shoestore.model.ResponseObject;
 import com.quoctoan.shoestore.service.OrderService;
+import com.quoctoan.shoestore.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class EmployeeController {
     @Autowired
     OrderService orderService;
+    @Autowired
+    ReviewService reviewService;
 
     @GetMapping("order/findAll")
     public ResponseEntity<ResponseObject> getAllOrders() {
@@ -33,5 +36,15 @@ public class EmployeeController {
     public String uploadImageOrder(@RequestParam("namePath") String namePath, @RequestParam("file") MultipartFile file,
                                      @RequestParam("orderId") Integer orderId) {
         return orderService.uploadImage(file, namePath, orderId);
+    }
+
+    @GetMapping("review/getAll")
+    public ResponseEntity<ResponseObject> getAllReview(){
+        return reviewService.getAllReview();
+    }
+
+    @PutMapping("review/updateStatus")
+    public ResponseEntity<ResponseObject> updateReviewStatus(@RequestBody String json){
+        return  reviewService.updateStatusReview(json);
     }
 }

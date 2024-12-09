@@ -58,11 +58,12 @@ public class ProductController {
     @GetMapping("/products/filter")
     public ResponseEntity<ResponseObject> findAllByFilters(
             @RequestParam(required = false) Integer categoryId,
+            @RequestParam(required = false) Integer brandId,
             @RequestParam(required = false) Double minRating,
             @RequestParam(required = false, defaultValue = "desc") String sortOrder, // Default to descending
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return productService.findAllByFilters(categoryId, minRating, sortOrder, page, size);
+        return productService.findAllByFilters(categoryId, brandId, minRating, sortOrder, page, size);
     }
 
     @GetMapping("products/category/{id}")
