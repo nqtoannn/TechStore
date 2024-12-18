@@ -43,14 +43,16 @@ public class SecurityConfiguration {
                         "/techstore/api/payment/**",
                         "/techstore/api/account/**",
                         "/techstore/api/brand/**",
-                        "/techstore/api/management/**",
-                        "/techstore/api/customer/**",
-                        "/techstore/api/employee/**"
+                        "/techstore/api/transaction/**"
+//                        "/techstore/api/management/**",
+//                        "/techstore/api/customer/**",
+//                        "/techstore/api/employee/**"
                 )
                 .permitAll()
-//                .requestMatchers("/techstore/api/management/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
-//                .requestMatchers("/techstore/api/employee/**").hasAnyRole(EMPLOYEE.name(), ADMIN.name())
-//                .requestMatchers("/techstore/api/customer/**").hasAnyRole(CUSTOMER.name(), ADMIN.name(), EMPLOYEE.name())
+                .requestMatchers("/techstore/api/transaction/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .requestMatchers("/techstore/api/management/**").hasAnyRole(ADMIN.name(), EMPLOYEE.name())
+                .requestMatchers("/techstore/api/employee/**").hasAnyRole(EMPLOYEE.name(), ADMIN.name())
+                .requestMatchers("/techstore/api/customer/**").hasAnyRole(CUSTOMER.name(), ADMIN.name(), EMPLOYEE.name())
                 .requestMatchers("/techstore/api/address/**").hasAnyRole(CUSTOMER.name(), ADMIN.name())
                 .requestMatchers("/techstore/api/users/**").hasAnyRole(CUSTOMER.name(), EMPLOYEE.name(), ADMIN.name())
                 .anyRequest()

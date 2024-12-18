@@ -39,7 +39,7 @@ public class ProductItemService {
                 productItem -> {
                     ProductItemModel productItemModel = new ProductItemModel();
                     productItemModel.setId(productItem.getId());
-                    productItemModel.setProductItemName(productItem.getProductItemName());
+                    productItemModel.setProductItemName(productItem.getProduct().getName() +" Phân loại: " + productItem.getProductItemName());
                     productItemModel.setPrice(productItem.getPrice());
                     productItemModel.setImageUrl(productItem.getImageUrl());
                     productItemModel.setStatus(productItem.getStatus());
@@ -63,7 +63,6 @@ public class ProductItemService {
             String imageUrl = jsonNode.get("imageUrl") != null ? jsonNode.get("imageUrl").asText() : "";
             Integer quantity = jsonNode.get("quantity") != null ? jsonNode.get("quantity").asInt() : -1;
             Integer productId = jsonNode.get("productId") != null ? jsonNode.get("productId").asInt() : -1;
-
             ProductItem productItem = new ProductItem();
             productItem.setProductItemName(productItemName);
             Product product = new Product();

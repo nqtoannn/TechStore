@@ -267,7 +267,7 @@ public class OrderService {
             System.out.println(customerId + productItemIdList.toString());
             deleteCartByCustomerProductItem(customerId,productItemIdList);
             model.put("orderItems", orderItemsJSON);
-//            emailSendService.sendMail(user.get().getEmail(), cc, "Thông báo đặt hàng thành công", model);
+            emailSendService.sendMail(user.get().getEmail(), cc, "Thông báo đặt hàng thành công", model);
             if(paymentMethodModel.get().getPaymentMethodName().equals("VN-Pay")){
                 String url = paymentService.createVnPayPaymentforOrder(totalPrice,order.getId(),request);
                 return ResponseEntity.status(HttpStatus.OK)

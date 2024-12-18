@@ -19,26 +19,17 @@ public class Transaction extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Integer transaction_id;
-
     @Column
-    private int total_quantity;
-
+    private Integer total_quantity;
     @Column
     private Double total_price;
-
     @Column
     private String status;
-
     @Column
     private String type;
-
-    @Column
-    private Integer user_id;
-
     @ManyToOne
-    @JoinColumn(name = "user_id",insertable = false,updatable = false)
+    @JoinColumn(name = "user_id")
     private User user;
-
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<TransactionDetail> transactionDetails = new ArrayList<>();
 }

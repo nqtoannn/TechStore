@@ -97,7 +97,7 @@
                                                         <tr>
                                                             <td align="center">
                                                                 <span class="es-button-border" style="border-radius:6px;border-color:#5c68e2;border-width:2px;background:#5c68e2">
-                                                                    <a href="https://localhost:3000/order/${orderId}" target="_blank" class="es-button" style="border-left-width:30px;border-right-width:30px;border-radius:6px">Theo dõi đơn hàng</a>
+                                                                    <a href="http://localhost:3000/list-order" target="_blank" class="es-button" style="border-left-width:30px;border-right-width:30px;border-radius:6px">Theo dõi đơn hàng</a>
                                                                 </span>
                                                             </td>
                                                         </tr>
