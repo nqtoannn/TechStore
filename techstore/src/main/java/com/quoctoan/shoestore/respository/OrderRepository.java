@@ -46,5 +46,18 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "LIMIT 1000")
     List<Object[]> getProductSales();
 
+    @Query("SELECT p.id AS product_id, p.name AS product_name, o.orderDate AS order_date, " +
+            "SUM(oi.quantity * oi.price) AS total_sold, SUM(oi.quantity) AS total_quantity " +
+            "FROM Product p " +
+            "JOIN ProductItem pi ON pi.id = p.id " +
+            "JOIN OrderItem oi ON oi.productItem.id = pi.id " +
+            "JOIN Order o ON oi.id = o.id " +
+            "WHERE o.orderStatus.id IN (4, 5) " +
+            "AND o.orderDate BETWEEN :startDate AND :endDate " +
+            "GROUP BY p.id, p.name, o.orderDate " +
+            "ORDER BY total_sold DESC " +
+            "LIMIT 1000")
+    List<Object[]> getProductSalesByDate(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
 
 }

@@ -89,6 +89,12 @@ public class ManagementController {
         return revenueService.getRevenueByProduct();
     }
 
+    @GetMapping("getProductSalesByDate")
+    public ResponseEntity<ResponseObject> getProductSalesByDate(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                               @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return revenueService.getProductSalesByDate(startDate,endDate);
+    }
+
     @GetMapping("revenueProductByDate/between")
     public ResponseEntity<ResponseObject> findRevenueByDates(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                                              @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
@@ -99,6 +105,5 @@ public class ManagementController {
     public ResponseEntity<ResponseObject> addBrand(@RequestBody String json){
         return brandService.addBrand(json);
     }
-
-
+    
 }
