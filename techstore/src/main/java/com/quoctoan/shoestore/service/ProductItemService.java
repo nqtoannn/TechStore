@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.quoctoan.shoestore.entity.Product;
 import com.quoctoan.shoestore.entity.ProductItem;
+import com.quoctoan.shoestore.entity.UpdatePrice;
 import com.quoctoan.shoestore.model.ResponseObject;
 import com.quoctoan.shoestore.entity.User;
 import com.quoctoan.shoestore.model.ProductItemModel;
 import com.quoctoan.shoestore.respository.ProductItemRepository;
+import com.quoctoan.shoestore.respository.UpdatePriceRepository;
 import com.quoctoan.shoestore.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +17,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,13 +32,9 @@ public class ProductItemService {
     @Autowired
     private ProductItemRepository productItemRepository;
     @Autowired
-    private EmailSendService emailSendService;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private StorageService storageService;
-
-
+    @Autowired
+    private UpdatePriceRepository updatePriceRepository;
     public ResponseEntity<ResponseObject> findAll() {
         List<ProductItem> productItemList = productItemRepository.findAll();
         List<ProductItemModel> productItemModelList = productItemList.stream().map(
@@ -91,7 +93,6 @@ public class ProductItemService {
             Double price = jsonNode.get("price") != null ? jsonNode.get("price").asDouble() : null;
             Integer quantity = jsonNode.get("quantity") != null ? jsonNode.get("quantity").asInt() : -1;
             Integer productItemId = jsonNode.get("productItemId") != null ? jsonNode.get("productItemId").asInt() : -1;
-            String color = jsonNode.get("color") != null ? jsonNode.get("color").asText() : "";
             Optional<ProductItem> productItemOptional = productItemRepository.findById(productItemId);
             if (productItemOptional.isPresent()) {
                 ProductItem productItem = productItemOptional.get();
@@ -137,8 +138,47 @@ public class ProductItemService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("Error", e.getMessage(), ""));
         }
-
     }
+
+    public ResponseEntity<ResponseObject> updatePrice(String json) {
+        JsonNode jsonNode;
+        JsonMapper jsonMapper = new JsonMapper();
+        try {
+            jsonNode = jsonMapper.readTree(json);
+            Integer productItemId = jsonNode.get("productItemId") != null ? jsonNode.get("productItemId").asInt() : -1;
+            Double price = jsonNode.get("price") != null ? jsonNode.get("price").asDouble() : 0;
+            LocalDateTime startTime = jsonNode.get("startTime") != null ?
+                    LocalDateTime.parse(jsonNode.get("startTime").asText()) : null;
+
+            if (startTime == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseObject("ERROR", "Start time is required", ""));
+            }
+
+            Optional<ProductItem> productItemOptional = productItemRepository.findById(productItemId);
+            if (productItemOptional.isPresent()) {
+                ProductItem productItem = productItemOptional.get();
+
+                UpdatePrice updatePrice = new UpdatePrice();
+                updatePrice.setProductItem(productItem);
+                updatePrice.setPrice(price);
+                updatePrice.setStartDateTime(startTime);
+                updatePrice.setStatus("WAITING");
+                updatePriceRepository.save(updatePrice);
+
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("OK", "Successfully", productItem.getId()));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseObject("ERROR", "Product item not found", ""));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseObject("ERROR", e.getMessage(), ""));
+        }
+    }
+
+
 
 
 //    public String uploadImage(MultipartFile file, String namePath, Integer serviceHairId) {

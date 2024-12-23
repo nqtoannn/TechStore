@@ -2,6 +2,7 @@ package com.quoctoan.shoestore.controller;
 
 import com.quoctoan.shoestore.model.AuthenticationResponse;
 import com.quoctoan.shoestore.model.ResponseObject;
+import com.quoctoan.shoestore.respository.ProductItemRepository;
 import com.quoctoan.shoestore.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,6 +30,8 @@ public class ManagementController {
     private AuthenticationService authenticationService;
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private ProductItemService productItemService;
 
     //###############Employee/Customer################
     @PostMapping("addEmployee") //done
@@ -104,6 +107,11 @@ public class ManagementController {
     @PostMapping("brand/add")
     public ResponseEntity<ResponseObject> addBrand(@RequestBody String json){
         return brandService.addBrand(json);
+    }
+
+    @PostMapping("updatePrice/add")
+    public ResponseEntity<ResponseObject> addUpdatePrice(@RequestBody String json){
+        return productItemService.updatePrice(json);
     }
 
 }
