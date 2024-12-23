@@ -105,5 +105,5 @@ public class ManagementController {
     public ResponseEntity<ResponseObject> addBrand(@RequestBody String json){
         return brandService.addBrand(json);
     }
-    
+
 }

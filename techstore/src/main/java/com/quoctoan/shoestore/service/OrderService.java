@@ -11,12 +11,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +43,8 @@ public class OrderService {
     PaymentService paymentService;
     @Autowired
     StorageService storageService;
+    @Autowired
+    ScheduledTaskService scheduledTaskService;
 
     public ResponseEntity<ResponseObject> findAllOrders() {
         List<Order> orderList = orderRepository.findAll();
@@ -270,6 +274,7 @@ public class OrderService {
             emailSendService.sendMail(user.get().getEmail(), cc, "Thông báo đặt hàng thành công", model);
             if(paymentMethodModel.get().getPaymentMethodName().equals("VN-Pay")){
                 String url = paymentService.createVnPayPaymentforOrder(totalPrice,order.getId(),request);
+                scheduledTaskService.scheduleOrderCheck(order.getId());
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("OK", "Successfully", url));
             }
