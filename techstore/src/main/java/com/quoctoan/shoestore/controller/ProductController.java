@@ -40,7 +40,7 @@ public class ProductController {
         return productService.findAll(page, size);
     }
 
-    @GetMapping("products/findAllProducts")
+        @GetMapping("products/findAllProducts")
     public ResponseEntity<ResponseObject> findAll() {
         return productService.findAllProduct();
     }

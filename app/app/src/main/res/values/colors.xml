@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="primary">#00ACD6</color>
+    <color name="lavender">#8692f7</color>
+    <color name="green">#FF00FF00</color>
+    <color name="pay">#FF9800</color>
+    <color name="blue">#60F7F2</color>
+
+    <!-- Additional Colors -->
+    <color name="dark_gray">#FF444444</color>
+    <color name="gray">#FF888888</color>
+    <color name="light_gray">#FFCCCCCC</color>
+    <color name="red">#FFFF0000</color>
+    <color name="light_red">#FFFFA07A</color>
+    <color name="yellow">#FFFFFF00</color>
+    <color name="orange">#FFFFA500</color>
+    <color name="purple">#FF800080</color>
+    <color name="pink">#FFFFC0CB</color>
+    <color name="brown">#FFA52A2A</color>
+    <color name="cyan">#FF00FFFF</color>
+    <color name="light_blue">#FFADD8E6</color>
+    <color name="teal">#FF008080</color>
+    <color name="aqua">#ADFFD3</color>
+</resources>

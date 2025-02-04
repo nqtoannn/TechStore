@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.home.HomeFragment">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp">
+                                <ImageView
+                                    android:id="@+id/logo"
+                                    android:layout_width="60dp"
+                                    android:layout_height="80dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:paddingVertical="5dp"
+                                    android:src="@drawable/logo" />
+
+                                <EditText
+                                    android:id="@+id/search_bar"
+                                    android:layout_width="260dp"
+                                    android:layout_height="40dp"
+                                    android:layout_toStartOf="@+id/cart_icon"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/rounded_search_background"
+                                    android:hint="Tìm kiếm sản phẩm"
+                                    android:imeOptions="actionSearch"
+                                    android:paddingStart="16dp"
+                                    android:paddingEnd="16dp"
+                                    android:drawableEnd="@drawable/search"
+                                    android:drawablePadding="8dp"
+                                    android:textSize="14sp"
+                                    android:gravity="center_vertical" />
+
+
+                                <ImageView
+                                    android:id="@+id/cart_icon"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginTop="11dp"
+                                    android:layout_marginRight="15dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:src="@drawable/filter" />
+                        </RelativeLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:id="@+id/filter"
+                            android:gravity="center"
+                            >
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                        <TextView
+                                            android:id="@+id/tv_category"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textStyle="bold"
+                                            android:layout_marginLeft="16dp"
+                                            android:layout_marginRight="16dp"
+                                            android:text="Phân loại      "
+                                            android:textSize="16sp"
+                                            android:layout_below="@id/text_customer_address"
+                                            android:padding="8dp"/>
+                                        <Spinner
+                                            android:id="@+id/spinner_category"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_below="@id/paymentMethod"
+                                            android:background="@drawable/round_back_dark_blue5_15"
+                                            android:layout_marginRight="16dp"
+                                            android:padding="8sp"/>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:orientation="horizontal">
+                                        <TextView
+                                            android:id="@+id/tv_rating"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textStyle="bold"
+                                            android:layout_marginLeft="16dp"
+                                            android:layout_marginRight="16dp"
+                                            android:text="Đánh giá       "
+                                            android:textSize="16sp"
+                                            android:layout_below="@id/text_customer_address"
+                                            android:padding="8dp"/>
+                                        <Spinner
+                                            android:id="@+id/spinner_rating"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/paymentMethod"
+                                            android:background="@drawable/round_back_dark_blue5_15"
+                                            android:layout_marginRight="16dp"
+                                            android:layout_alignParentRight="true"
+                                            android:padding="8sp"/>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:orientation="horizontal">
+                                        <TextView
+                                            android:id="@+id/tv_sort"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textStyle="bold"
+                                            android:layout_marginLeft="16dp"
+                                            android:layout_marginRight="16dp"
+                                            android:text="Sắp xếp         "
+                                            android:textSize="16sp"
+                                            android:layout_below="@id/text_customer_address"
+                                            android:padding="8dp"/>
+                                        <Spinner
+                                            android:id="@+id/spinner_sort"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/paymentMethod"
+                                            android:background="@drawable/round_back_dark_blue5_15"
+                                            android:layout_marginRight="16dp"
+                                            android:layout_alignParentRight="true"
+                                            android:padding="8sp"/>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:orientation="horizontal">
+                                        <TextView
+                                            android:id="@+id/tv_brand"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textStyle="bold"
+                                            android:layout_marginLeft="16dp"
+                                            android:layout_marginRight="16dp"
+                                            android:text="Thương hiệu"
+                                            android:textSize="16sp"
+                                            android:layout_below="@id/text_customer_address"
+                                            android:padding="8dp"/>
+                                        <Spinner
+                                            android:id="@+id/spinner_brand"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/paymentMethod"
+                                            android:background="@drawable/round_back_dark_blue5_15"
+                                            android:layout_marginRight="16dp"
+                                            android:layout_alignParentRight="true"
+                                            android:padding="8sp"/>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:layout_marginTop="5dp"
+                                    android:gravity="center">
+                                        <TextView
+                                            android:id="@+id/txt_apply_filter"
+                                            android:layout_width="wrap_content"
+                                            android:textSize="14dp"
+                                            android:textColor="@color/primary"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginRight="50dp"
+                                            android:text="     Áp dụng     "></TextView>
+                                        <TextView
+                                            android:id="@+id/txt_clear_filter"
+                                            android:layout_width="wrap_content"
+                                            android:textSize="14dp"
+                                            android:textColor="@color/primary"
+                                            android:layout_height="wrap_content"
+                                            android:text="Xóa bộ lọc"></TextView>
+                                </LinearLayout>
+
+                                <View
+                                    android:id="@+id/txt_close"
+                                    android:layout_width="match_parent"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_height="1dp"
+                                    android:background="@color/dark_gray"
+                                    />
+                        </LinearLayout>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scrollbars="vertical" />
+                </LinearLayout>
+
+        </ScrollView>
+</RelativeLayout>
+
+</FrameLayout>

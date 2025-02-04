@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="178dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="10dp"
+    android:orientation="vertical"
+    android:background="@color/material_dynamic_neutral95"
+    android:layout_marginBottom="10dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/item_image"
+        android:layout_width="170dp"
+        android:layout_height="220dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:scaleType="fitXY"
+        app:shapeAppearanceOverlay="@style/RoundedImageView"/>
+
+    <TextView
+        android:id="@+id/tvProductItemName"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_height="wrap_content"
+        android:text="Product Name"
+        android:textSize="12sp"
+        android:textColor="@android:color/black"
+        android:maxLines="1"
+        android:ellipsize="end"
+        />
+
+    <TextView
+        android:id="@+id/tvProuctItemPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:text="Price"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@android:color/black"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:paddingBottom="5dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="4.5"
+            android:stepSize="0.5"
+            android:isIndicator="true"
+            style="@style/Widget.AppCompat.RatingBar.Small"/>
+
+        <!-- TextView to show the number of products sold -->
+        <TextView
+            android:id="@+id/tvSoldQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="(100 đã bán)"
+            android:textSize="10sp"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buy_button"
+        android:layout_width="100dp"
+        android:layout_marginBottom="5sp"
+        android:visibility="gone"
+        android:background="@drawable/round_back_primary"
+        android:layout_height="30dp"
+        android:layout_marginLeft="40sp"
+        android:text="Mua ngay"
+        android:textSize="10sp" />
+
+</LinearLayout>

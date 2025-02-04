@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- Ảnh thanh toán thành công -->
+
+    <!-- Text thông báo -->
+
+    <!-- Button Quay về trang chủ -->
+
+    <ImageView
+        android:id="@+id/image_success"
+        android:layout_width="204dp"
+        android:layout_height="228dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="103dp"
+        android:layout_marginEnd="105dp"
+        android:src="@drawable/ic_pay_success" />
+
+    <TextView
+        android:id="@+id/text_success_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_success"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:text="Đơn hàng của bạn đã được đặt hàng thành công và đang được giao cho đơn vị vận chuyển"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_back_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_success_message"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="151dp"
+        android:layout_marginEnd="49dp"
+        android:background="@drawable/round_back_primary"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="Về trang chủ"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnGoToHistoryOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_success_message"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="49dp"
+        android:background="@drawable/round_back_primary"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="Lịch sử đơn hàng"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</RelativeLayout>
