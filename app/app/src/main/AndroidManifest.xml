@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.HairSalon"
+        tools:targetApi="31">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+        <activity
+            android:name=".activity.employee.HomeEmployee"
+            android:exported="false" />
+        <activity
+            android:name=".activity.order.OrderDetail"
+            android:exported="false" />
+        <activity
+            android:name=".activity.employee.OrderDetailEmployee"
+            android:exported="false" />
+
+
+        <activity
+            android:name=".activity.auth.Login"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.product.DetailProductActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".activity.shop.HomeShopActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.product.ListProductSearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.order.OrderHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.order.SuccessPay"
+            android:exported="false" />
+        <activity
+            android:name=".activity.home.HomeCustomer"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activity.order.PayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.cart.CartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.order.OrderReview"
+            android:exported="false" />
+        <activity
+            android:name=".activity.auth.ChangePassword"
+            android:exported="false" />
+        <activity
+            android:name=".activity.auth.Register"
+            android:exported="false" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".activity.auth.ForgetPassword" />
+    </application>
+
+</manifest>

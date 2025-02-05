@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:layout_below="@id/text_product_description"
+    android:padding="8dp">
+
+    <LinearLayout
+    android:layout_width="wrap_content"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/imgcustomer">
+    </ImageView>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/text_comment_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên người dùng"
+            android:textStyle="bold"/>
+        <RatingBar
+            android:id="@+id/rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="4.5"
+            android:stepSize="0.5"
+            android:isIndicator="true"
+            style="@style/Widget.AppCompat.RatingBar.Small"/>
+        <TextView
+            android:layout_marginTop="8dp"
+            android:id="@+id/text_comment_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày bình luận"/>
+        <TextView
+            android:id="@+id/text_comment_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nội dung bình luận"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/review_img"
+            android:layout_height="90dp"
+            android:visibility="gone"
+            android:layout_width="90dp"
+            android:scaleType="center"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            app:srcCompat="@drawable/placeholder_image"/>
+    </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

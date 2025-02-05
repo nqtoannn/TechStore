@@ -104,10 +104,21 @@ public class RevenueService {
                 .body(new ResponseObject("OK", "Successfully", dailyRevenues));
     }
 
+    public ResponseEntity<ResponseObject> getProductSalesByDate(
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        List<Object[]> results = orderRepository.getProductSalesByDate(startDate, endDate);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Successfully", results));
+    }
+
     public ResponseEntity<ResponseObject> getRevenueByProduct(){
         List<Object[] > results = orderRepository.getProductSales();
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "Successfully",results));
     }
+
+
     public ResponseEntity<ResponseObject> getMostPurchased(){
         List<ProductItem> productList = productItemRepository.getMostPruchased();
         List<ProductResponseModel> productResponseModelList = new ArrayList<>();

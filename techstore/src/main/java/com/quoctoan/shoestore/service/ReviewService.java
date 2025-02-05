@@ -2,18 +2,22 @@ package com.quoctoan.shoestore.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.quoctoan.shoestore.entity.*;
 import com.quoctoan.shoestore.model.ResponseObject;
 import com.quoctoan.shoestore.model.ReviewResponse;
 import com.quoctoan.shoestore.respository.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;;
 import java.text.ParsePosition;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -126,6 +130,7 @@ public class ReviewService {
                     review.setProduct(product);
                     review.setStatus("show");
                     Review savedReview = reviewRepository.save(review);
+                    predictText(review.getComment(), review.getId());
                     savedReviewIds.add(savedReview.getId());
                     product.setRating((product.getRated() * product.getRating() + ratingValue) / (product.getRated() + 1));
                     product.setRated(product.getRated() + 1);
@@ -185,4 +190,38 @@ public class ReviewService {
         reviewResponse.setProductName(review.getProduct().getName());
         return reviewResponse;
     }
+
+    public void predictText(String text, Integer reviewId) {
+        String url = "http://localhost:5000/predict";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HashMap<String, String> request = new HashMap<>();
+        request.put("text", text);
+        HttpEntity<HashMap<String, String>> entity = new HttpEntity<>(request, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+        JsonObject jsonObject = JsonParser.parseString(response.getBody()).getAsJsonObject();
+        String label = jsonObject.get("label").getAsString();
+        System.out.println(label);
+        System.out.println(text);
+        if(label.equals("clean")){
+            return;
+        }
+        if(label.equals("offensive")){
+            updateReviewStatus(reviewId,label);
+        }
+        if(label.equals("hate")){
+            updateReviewStatus(reviewId,label);
+        }
+    }
+
+    public void updateReviewStatus(Integer reviewId, String status){
+        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+        if(optionalReview.isPresent()){
+            Review review = optionalReview.get();
+            review.setStatus(status);
+            reviewRepository.save(review);
+        }
+    }
+
 }

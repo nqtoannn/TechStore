@@ -36,7 +36,7 @@ public class Order extends BaseEntity{
     private OrderStatus orderStatus;
     @Column(name = "order_date")
     private LocalDate orderDate;
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, orphanRemoval = true,
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, orphanRemoval = true,
             cascade = CascadeType.ALL)
     private Collection<OrderItem> orderItems;
     private String address;

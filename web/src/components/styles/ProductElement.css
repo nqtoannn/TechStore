@@ -1,0 +1,48 @@
+.product-container {
+    border: 3px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+  }
+  
+  .itemname {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+    
+  .product-infor-btn {
+    margin-top: 10px; /* Tạo khoảng cách giữa thông tin sản phẩm và nút */
+  }
+  
+  .button-item-shop {
+    color: #fff;
+    margin-right: 10px;
+    width: 100px;
+    font-size: 14px;
+    background-color: #ff5722;
+  }
+  
+  .button-item-shop:hover {
+    background-color: #ff7f5e;
+  }
+  
+  .dialog-content {
+    padding: 20px;
+  }
+  
+  .dialog-title {
+    background-color: #ff5722;
+    color: #fff;
+  }
+  
+  .dialog-actions {
+    justify-content: space-between;
+    margin-top: 20px; /* Tạo khoảng cách giữa dialog content và dialog actions */
+  }
+  

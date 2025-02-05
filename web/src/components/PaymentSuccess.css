@@ -1,0 +1,26 @@
+.payment-success-container {
+    text-align: center;
+    margin-top: 100px; 
+    margin-bottom: 100px;/* Push content up */
+}
+
+.checkmark-icon {
+    width: 200px;
+    height: 200px;
+    color: #4CAF50; /* Green color */
+}
+
+.back-to-home-btn {
+    background-color: #4CAF50; /* Green background color */
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 20px; /* Increase button padding */
+    border: none;
+    border-radius: 5px;
+    margin-top: 100px;
+    transition: background-color 0.3s;
+}
+
+.back-to-home-btn:hover {
+    background-color: #388E3C; /* Light green background color on hover */
+}

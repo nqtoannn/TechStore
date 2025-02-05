@@ -1,5 +1,6 @@
 package com.quoctoan.shoestore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collection;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,4 +36,8 @@ public class ProductItem extends BaseEntity {
     private Integer quantityInStock;
     private String status;
     private String imageUrl;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product_item", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    private Collection<TransactionDetail> transactionDetails;
 }

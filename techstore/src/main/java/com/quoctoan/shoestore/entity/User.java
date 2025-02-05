@@ -36,8 +36,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Token> tokens;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Transaction> transactions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
